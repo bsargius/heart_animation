@@ -3,22 +3,23 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 
 fig = plt.figure() # creates figure object think of this like creating a canvas
-ax = plt.axes(xlim=(2.5,5.5), ylim=(2.5,6)) # sets the boundaries of the axes of the canvas
+ax = plt.axes(xlim=(0, 8), ylim=(0, 8)) # sets the boundaries of the axes of the canvas
 line, = ax.plot([], [], lw=2) #creates line object that will be modified in the animation
-line2, = ax.plot([], [], lw=2)
+line.set_color("red")
 
 def init():
     line.set_data([], [])
-    line2.set_data([], [])
-    return line, line2,
+    return line,
 
 def animate(i):
-    x = np.linspace(2.5,5.5, 2000)
-    y = (4 + (4-x)**(2/3)) + (0.9 * (2-(4-x)**2)**(1/2)) * np.sin(np.pi * i * x)
+    # creates numpy array of 20000 equally spaced values between 2.6 and 5.4 
+    # this essentially creates the bounds on the x axis of the heart
+    x = np.linspace(2.6, 5.4, 20000)
+    y = 4 + (abs(4-x)**(2/3) + ((0.9 * abs(2-abs(4-x)**2)**(1/2)) * np.sin(np.pi * i * x)))
     line.set_data(x, y)
-    line2.set_data(x, -y)
-    return line, line2,
+    return line,
 
-anim = animation.FuncAnimation(fig, animate, init_func=init, frames=100, interval=20, blit=True)
+
+anim = animation.FuncAnimation(fig, animate, init_func=init, frames=50, interval=50, blit=True)
 
 plt.show()
